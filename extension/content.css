@@ -1,0 +1,217 @@
+/* AI Image Detector — injected popup styles */
+
+#aid-popup {
+  position: absolute;
+  width: 280px;
+  background: #0d0d0f;
+  border: 1px solid #2a2a35;
+  border-radius: 14px;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255,255,255,0.04);
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-size: 13px;
+  color: #e8e8f0;
+  z-index: 2147483647;
+  overflow: hidden;
+  animation: aid-slide-in 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes aid-slide-in {
+  from { opacity: 0; transform: translateY(-8px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.aid-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 14px 10px;
+  border-bottom: 1px solid #1e1e28;
+  background: #111116;
+}
+
+.aid-logo {
+  font-size: 16px;
+  color: #7c6aff;
+  line-height: 1;
+}
+
+.aid-title {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #9898b0;
+  flex: 1;
+}
+
+.aid-close {
+  background: none;
+  border: none;
+  color: #555570;
+  cursor: pointer;
+  font-size: 13px;
+  padding: 2px 4px;
+  border-radius: 4px;
+  line-height: 1;
+  transition: color 0.15s;
+}
+
+.aid-close:hover {
+  color: #e8e8f0;
+}
+
+.aid-body {
+  padding: 18px 16px 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Spinner */
+.aid-spinner {
+  width: 32px;
+  height: 32px;
+  border: 2px solid #2a2a40;
+  border-top-color: #7c6aff;
+  border-radius: 50%;
+  animation: aid-spin 0.7s linear infinite;
+}
+
+@keyframes aid-spin {
+  to { transform: rotate(360deg); }
+}
+
+.aid-status-text {
+  margin: 0;
+  color: #7070a0;
+  font-size: 12px;
+}
+
+/* Result icon */
+.aid-result-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+
+.aid-icon-ai {
+  background: rgba(255, 70, 70, 0.12);
+  color: #ff4646;
+  border: 1.5px solid rgba(255, 70, 70, 0.3);
+}
+
+.aid-icon-real {
+  background: rgba(50, 220, 130, 0.12);
+  color: #32dc82;
+  border: 1.5px solid rgba(50, 220, 130, 0.3);
+}
+
+.aid-icon-manipulated {
+  background: rgba(245, 158, 11, 0.12);
+  color: #f59e0b;
+  border: 1.5px solid rgba(245, 158, 11, 0.3);
+}
+
+.aid-icon-uncertain {
+  background: rgba(255, 180, 50, 0.12);
+  color: #ffb432;
+  border: 1.5px solid rgba(255, 180, 50, 0.3);
+}
+
+.aid-icon-error {
+  background: rgba(150, 150, 160, 0.1);
+  color: #888;
+  border: 1.5px solid rgba(150,150,160,0.2);
+}
+
+/* Labels */
+.aid-label {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.aid-label-ai          { color: #ff4646; }
+.aid-label-real        { color: #32dc82; }
+.aid-label-manipulated { color: #f59e0b; }
+.aid-label-uncertain   { color: #ffb432; }
+.aid-label-error       { color: #888; }
+
+.aid-confidence {
+  font-size: 12px;
+  color: #6868a0;
+  margin: -4px 0 2px;
+}
+
+/* Progress bar */
+.aid-bar-track {
+  width: 100%;
+  height: 5px;
+  background: #1e1e2e;
+  border-radius: 99px;
+  overflow: hidden;
+  margin-top: 2px;
+}
+
+.aid-bar-fill {
+  height: 100%;
+  border-radius: 99px;
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.aid-bar-ai          { background: linear-gradient(90deg, #ff4646, #ff7070); }
+.aid-bar-real        { background: linear-gradient(90deg, #32dc82, #60eeaa); }
+.aid-bar-manipulated { background: linear-gradient(90deg, #d97706, #f59e0b); }
+.aid-bar-uncertain   { background: linear-gradient(90deg, #ffb432, #ffd080); }
+
+/* Note text */
+.aid-note {
+  margin: 0;
+  font-size: 11px;
+  color: #55558a;
+  text-align: center;
+  line-height: 1.5;
+}
+
+/* Footer */
+.aid-footer {
+  padding: 8px 16px;
+  border-top: 1px solid #1a1a24;
+  background: #0a0a0e;
+  text-align: center;
+  font-size: 10px;
+  color: #383858;
+  letter-spacing: 0.04em;
+}
+
+.aid-forensic-log {
+  width: 100%;
+  margin-top: 12px;
+  padding: 8px;
+  background: rgba(0,0,0,0.2);
+  border-radius: 6px;
+  font-size: 10px;
+  color: #8888b0;
+  text-align: left;
+}
+
+.aid-forensic-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 3px;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+  padding-bottom: 2px;
+}
+
+.aid-forensic-value {
+  color: #c5c6c7;
+  font-weight: 600;
+}

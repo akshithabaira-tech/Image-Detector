@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Image Detector - Vision Arbiter Analysis</title>
+    <link rel="stylesheet" href="style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <meta name="description" content="State-of-the-art AI image detection using the Gemini Vision Arbiter and local ensemble models.">
+    <!-- OpenGraph SEO -->
+    <meta property="og:title" content="AI Image Detector - Professional Analysis">
+    <meta property="og:description" content="Detect AI-generated images with high-reasoning vision models.">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="AI Image Detector - Vision Arbiter Analysis">
+    <meta name="twitter:description" content="AI image verification powered by Gemini 1.5 Vision and thermal heatmap analysis.">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <h1 class="logo">🧠 AI Image Detector</h1>
+            <p style="text-align: center; color: var(--text-secondary); font-size: 0.95rem; margin-top: 0.5rem; letter-spacing: 0.05em;">
+                HYBRID VISION ARBITER ENSEMBLE
+            </p>
+        </div>
+    </nav>
+
+    <main class="container">
+        <section class="upload-section glass-panel">
+            <h2>🔍 Digital Forensic Analysis</h2>
+            <p style="text-align: center; color: var(--text-secondary); margin-bottom: 2rem; font-size: 1.05rem;">
+                Scan images for generative AI artifacts, textural anomalies, and GAN-specific frequency signatures.
+            </p>
+            
+            <label for="imageInput" class="drop-zone" id="dropZone">
+                <div class="drop-zone-content">
+                    <span class="upload-icon">✨</span>
+                    <span class="drop-text" id="dropText">Drag & Drop Forensic Sample</span>
+                    <span class="file-hint">Industry-standard formats: JPG, PNG, WEBP (Max 10MB)</span>
+                </div>
+                <input type="file" id="imageInput" accept="image/*" class="hidden-input" />
+            </label>
+
+            <div id="previewContainer" class="preview-container hidden">
+                <div class="preview-wrapper">
+                    <img id="preview" src="#" alt="Forensic sample preview" />
+                    <div class="preview-overlay">
+                        <span id="previewName">sample_id_001.jpg</span>
+                    </div>
+                </div>
+            </div>
+            
+            <button id="analyzeBtn" class="glow-button" disabled>
+                <span class="btn-content">🚀 INITIATE SCAN</span>
+            </button>
+        </section>
+
+        <section id="resultSection" class="result-section glass-panel hidden">
+            <h3>📊 Analysis Payload</h3>
+            <div id="resultCard" class="card">
+                <div class="result-details">
+                    <div class="verdict-container">
+                        <span class="verdict-label">Final Verdict</span>
+                        <h3 id="resultText" class="verdict-status"></h3>
+                    </div>
+                    
+                    <div class="meter-container">
+                        <div class="meter-label">
+                            <span>Forensic Confidence</span>
+                            <span id="confidenceText" class="confidence-pct">0%</span>
+                        </div>
+                        <div class="meter-bar">
+                            <div id="confidenceMeter" class="meter-fill"></div>
+                        </div>
+                    </div>
+
+                    <div id="resultReason" class="report-text">
+                        <span class="report-title">💡 Reason:</span>
+                        <div id="additionalInfo"></div>
+                    </div>
+                    
+                    <div id="scoreBreakdown" class="score-breakdown hidden">
+                        <h4>🧩 Multi-Signal Analysis Breakdown</h4>
+                        <div id="signalsContainer" class="signals-grid"></div>
+                    </div>
+                </div>
+                <button id="resetBtn" class="reset-button">Analyze New Sample</button>
+            </div>
+
+            <div id="heatmapContainer" class="heatmap-container hidden">
+                <h4>🔍 Artifact Heatmap (Signal Density)</h4>
+                <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1.5rem; line-height: 1.4;">
+                    Thermal visualization of localized textural anomalies. Areas in **RED** indicate regions with uncharacteristically smooth transition gradients typical of diffusion generators.
+                </p>
+                <div class="heatmap-wrapper">
+                    <img id="heatmapImage" src="" alt="Detection heatmap" />
+                </div>
+            </div>
+        </section>
+
+        <section class="info-section glass-panel">
+            <h2 style="font-size: 1.3rem; margin-bottom: 2rem; text-align: center; color: var(--primary-color);">🔍 Forensic Methodologies</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem;">
+                <div class="info-card">
+                    <div style="font-size: 2.5rem; margin-bottom: 1rem;">🛰️</div>
+                    <h4 style="font-size: 1.1rem; margin-bottom: 0.8rem; color: var(--primary-color);">Vision Arbiter</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-secondary);">High-reasoning multimodal Gemini model evaluates anatomical accuracy and lighting consistency.</p>
+                </div>
+                <div class="info-card">
+                    <div style="font-size: 2.5rem; margin-bottom: 1rem;">🧬</div>
+                    <h4 style="font-size: 1.1rem; margin-bottom: 0.8rem; color: var(--primary-color);">Frequency Domain</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-secondary);">FFT analysis identifies artificial high-frequency suppression patterns specific to AI upscalers.</p>
+                </div>
+                <div class="info-card">
+                    <div style="font-size: 2.5rem; margin-bottom: 1rem;">🌡️</div>
+                    <h4 style="font-size: 1.1rem; margin-bottom: 0.8rem; color: var(--primary-color);">Textural Heatmap</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-secondary);">Convolutional standard deviation mapping captures over-smooth 'plastic' regions in real-time.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="loading" class="loading hidden">
+        <div class="spinner"></div>
+        <p>Analyzing your image with AI...</p>
+        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.5rem;">
+            This may take a few seconds
+        </p>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
