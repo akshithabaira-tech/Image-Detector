@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | AI Image Detector</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        .login-page {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 80vh;
+        }
+        .login-card {
+            width: 100%;
+            max-width: 400px;
+            padding: 3rem;
+            text-align: center;
+        }
+        .login-header {
+            margin-bottom: 2.5rem;
+        }
+        .login-header h2 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #fff, var(--primary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+        .form-input {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            color: white;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 15px rgba(102, 252, 241, 0.2);
+        }
+        .error-msg {
+            color: var(--danger-color);
+            font-size: 0.85rem;
+            margin-top: 1rem;
+            display: none;
+        }
+        .login-footer {
+            margin-top: 2rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body class="login-page-body">
+    <nav class="navbar">
+        <div class="container">
+            <h1 class="logo">🧠 AI Image Detector</h1>
+        </div>
+    </nav>
+
+    <main class="container login-page">
+        <div class="login-card glass-panel fade-in-up">
+            <div class="login-header">
+                <h2>Access Portal</h2>
+                <p style="color: var(--text-secondary); font-size: 0.9rem;">Digital Forensic Unit Authentication</p>
+            </div>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">Specialist Identifier</label>
+                    <input type="text" id="username" class="form-input" placeholder="e.g. admin" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Security Protocol (Password)</label>
+                    <input type="password" id="password" class="form-input" placeholder="••••••••" required>
+                </div>
+                
+                <button type="submit" id="loginBtn" class="glow-button">
+                    <span class="btn-content">🔐 AUTHORIZE</span>
+                </button>
+
+                <div id="errorMsg" class="error-msg">⚠️ Invalid identifier or security protocol.</div>
+            </form>
+
+            <div class="login-footer">
+                <p>New Specialist? <a href="register.html" style="color: var(--primary-color); text-decoration: none; font-weight: 600;">Register Account</a></p>
+                <p style="margin-top: 1rem; opacity: 0.7;">Protected by Hybrid Vision Arbiter Security</p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Check if already logged in
+        if (localStorage.getItem('auth_token')) {
+            window.location.href = 'index.html';
+        }
+
+        const loginForm = document.getElementById('loginForm');
+        const errorMsg = document.getElementById('errorMsg');
+
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const loginBtn = document.getElementById('loginBtn');
+
+            loginBtn.disabled = true;
+            errorMsg.style.display = 'none';
+
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    localStorage.setItem('auth_token', data.token);
+                    window.location.href = 'index.html';
+                } else {
+                    errorMsg.style.display = 'block';
+                }
+            } catch (err) {
+                console.error('Login error:', err);
+                errorMsg.textContent = '⚠️ Connection to security server failed.';
+                errorMsg.style.display = 'block';
+            } finally {
+                loginBtn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>

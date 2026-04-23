@@ -2,12 +2,15 @@ from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
 from contextlib import asynccontextmanager
 from pathlib import Path
 import shutil
 import tempfile
 import logging
 import base64
+import json
+import os
 from dotenv import load_dotenv
 
 # load environment variables FROM .env file FIRST
@@ -51,6 +54,44 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Simple User Model for Login
+class LoginRequest(BaseModel):
+    username: str
+    password: str
+
+# User Storage Helper
+USERS_FILE = Path(__file__).parent / "users.json"
+
+def load_users():
+    if not USERS_FILE.exists():
+        # Create default admin user if file doesn't exist
+        default = {"admin": "admin123"}
+        with open(USERS_FILE, "w") as f:
+            json.dump(default, f)
+        return default
+    with open(USERS_FILE, "r") as f:
+        return json.load(f)
+
+def save_user(username, password):
+    users = load_users()
+    users[username] = password
+    with open(USERS_FILE, "w") as f:
+        json.dump(users, f)
+
+@app.post("/api/register")
+async def register(request: LoginRequest):
+    users = load_users()
+    if request.username in users:
+        raise HTTPException(status_code=400, detail="Identifier already in use")
+    save_user(request.username, request.password)
+    return {"status": "success", "message": "Forensic specialist registered"}
+
+@app.post("/api/login")
+async def login(request: LoginRequest):
+    users = load_users()
+    if request.username in users and users[request.username] == request.password:
+        return {"status": "success", "token": f"token-{request.username}"}
+    raise HTTPException(status_code=401, detail="Invalid credentials")
 
 @app.get("/api/health")
 async def health():

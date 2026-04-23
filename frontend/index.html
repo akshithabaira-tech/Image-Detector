@@ -22,6 +22,11 @@
             <p style="text-align: center; color: var(--text-secondary); font-size: 0.95rem; margin-top: 0.5rem; letter-spacing: 0.05em;">
                 HYBRID VISION ARBITER ENSEMBLE
             </p>
+            <div style="position: absolute; top: 1.5rem; right: 2rem;">
+                <button id="logoutBtn" style="background: transparent; border: 1px solid var(--border-color); color: var(--text-secondary); padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; font-size: 0.8rem; transition: all 0.3s ease;">
+                    🚪 Logout
+                </button>
+            </div>
         </div>
     </nav>
 
@@ -128,6 +133,17 @@
         </p>
     </div>
 
+    <script>
+        // Authentication Guard
+        if (!localStorage.getItem('auth_token')) {
+            window.location.href = 'login.html';
+        }
+
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            localStorage.removeItem('auth_token');
+            window.location.href = 'login.html';
+        });
+    </script>
     <script src="script.js"></script>
 </body>
 </html>

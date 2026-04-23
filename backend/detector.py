@@ -8,6 +8,7 @@ import os
 from dotenv import load_dotenv
 import google.generativeai as genai
 from typing import Tuple, Optional, Dict
+from google.api_core import exceptions as google_exceptions
 
 # Load environment variables
 load_dotenv()
@@ -187,7 +188,13 @@ class ImageDetector:
             # Real photos: high_freq_ratio typically > 0.55
             # AI images:   high_freq_ratio typically < 0.48
             ai_score = float(np.clip((0.58 - high_freq_ratio) / 0.15, 0.0, 1.0))
-            logger.info(f"FFT high-freq ratio: {high_freq_ratio:.4f}  →  fft_ai_score={ai_score:.4f}")
+            
+            # Secondary check: Standard deviation of magnitude (AI images often have more uniform noise)
+            mag_std = float(np.std(magnitude))
+            if mag_std < 1.2: # Typical threshold for AI-smoothness in frequency domain
+                ai_score = max(ai_score, 0.5)
+                
+            logger.info(f"FFT high-freq ratio: {high_freq_ratio:.4f}, mag_std: {mag_std:.4f}  →  fft_ai_score={ai_score:.4f}")
             return ai_score
         except Exception as e:
             logger.warning(f"FFT analysis failed: {e}")
@@ -246,11 +253,14 @@ class ImageDetector:
             logger.info(f"Gemini Arbiter Result: is_ai={is_ai} conf={conf} reason={reason} artifacts={len(artifacts)}")
             return is_ai, conf, reason, artifacts
             
+        except google_exceptions.ResourceExhausted:
+            logger.warning("Gemini API Quota Exhausted (429). Vision Arbiter is offline.")
+            return False, 0.0, "Vision Arbiter Offline: Quota Reached", ["Arbiter: OFFLINE (Quota)"]
         except Exception as e:
             logger.error(f"Gemini analysis failed: {e}")
             import traceback
             logger.error(traceback.format_exc())
-            return False, 0.0, f"Error: {str(e)}", []
+            return False, 0.0, f"Error: {str(e)}", ["Arbiter: ERROR"]
 
     # ──────────────────────────────────────────────────────────────────────────
     # Signal 6 — Forensic DSP Analysis (Manipulations)
@@ -343,16 +353,17 @@ class ImageDetector:
         # Ensemble Synthesis (90% HF Models + 10% FFT)
         weighted_fake_score = sum(s * w for s, w in zip(scores, weights)) + (fft_ai_score * 0.1)
         
-        # Step 4: FFT reduction to 10% was already applied in weighted_fake_score
-        
         # Signal 5: Gemini Arbiter Verification
         gemini_is_ai, gemini_conf, gemini_reason, gemini_artifacts = self._gemini_analysis(image_path)
         
         # Cross-Verification blending (Hybrid Intelligence)
-        if gemini_conf > 0:
+        arbiter_active = "OFFLINE" not in str(gemini_reason) and "Error" not in str(gemini_reason)
+        
+        if arbiter_active and gemini_conf > 0:
             gemini_val = gemini_conf if gemini_is_ai else (1.0 - gemini_conf)
             final_score = (weighted_fake_score * 0.6) + (gemini_val * 0.4)
         else:
+            # If arbiter is offline, rely 100% on ensemble + FFT
             final_score = weighted_fake_score
 
         # Manipulation Check

@@ -166,8 +166,14 @@ function displayResult(data) {
                     const [name, val] = art.split(':');
                     const pill = document.createElement('div');
                     pill.className = 'signal-pill';
+                    
+                    let displayVal = val.trim();
+                    if (displayVal.includes('OFFLINE') || displayVal.includes('ERROR')) {
+                        pill.classList.add('signal-offline');
+                    }
+                    
                     pill.innerHTML = `
-                        <span class="signal-val">${val.trim()}</span>
+                        <span class="signal-val">${displayVal}</span>
                         <span class="signal-name">${name.trim()}</span>
                     `;
                     signalsContainer.appendChild(pill);
